@@ -1,3 +1,1 @@
 Maven Surefire and Maven Failsafe provide native support for executing tests on the JUnit Platform. The pom.xml file in the {junit5-jupiter-starter-maven} project demonstrates how to use the Maven Surefire plugin and can serve as a starting point for configuring your Maven build.
-
-Do log levels properly

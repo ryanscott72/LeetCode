@@ -1,28 +1,75 @@
 package leetcode.problems.lrucache;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.stream.Stream;
+import leetcode.problems.lrucache.utils.GetInstruction;
+import leetcode.problems.lrucache.utils.Instruction;
+import leetcode.problems.lrucache.utils.NewInstruction;
+import leetcode.problems.lrucache.utils.PutInstruction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LRUCacheTest {
-    @Test
-    void testCaseOne() {
-        LRUCache lRUCache = new LRUCache(2);
-        lRUCache.put(1, 1); // cache is {1=1}
-        lRUCache.put(2, 2); // cache is {1=1, 2=2}
+  private static final Logger LOGGER = LogManager.getLogger();
 
-        assertEquals(1, lRUCache.get(1));
+  private static Stream<Arguments> testCasesProvider() {
+    return Stream.of(
+        Arguments.of(
+            new NewInstruction(2),
+            List.of(
+                new PutInstruction(new AbstractMap.SimpleEntry<>(1, 1)),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(2, 2)),
+                new GetInstruction(1, 1),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(3, 3)),
+                new GetInstruction(2, -1),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(4, 4)),
+                new GetInstruction(1, -1),
+                new GetInstruction(3, 3),
+                new GetInstruction(4, 4))),
+        Arguments.of(
+            new NewInstruction(1),
+            List.of(
+                new GetInstruction(6, -1),
+                new GetInstruction(8, -1),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(12, 1)),
+                new GetInstruction(2, -1),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(15, 11)),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(5, 2)),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(1, 15)),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(4, 2)),
+                new GetInstruction(4, 2),
+                new PutInstruction(new AbstractMap.SimpleEntry<>(15, 15)))));
+  }
 
-        lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-
-        assertEquals(-1, lRUCache.get(2));    // returns -1 (not found)
-
-        lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-
-        assertEquals(-1, lRUCache.get(1));    // return -1 (not found)
-
-        assertEquals(3, lRUCache.get(3));    // return 3
-
-        assertEquals(4, lRUCache.get(4));    // return 4
+  @ParameterizedTest
+  @MethodSource("testCasesProvider")
+  void testCases(final NewInstruction newInstruction, final List<Instruction<?>> instructions) {
+    printTestDivider();
+    LRUCache lruCache = new LRUCache(newInstruction.getArgument());
+    for (Instruction<?> instruction : instructions) {
+      printOperationDivider();
+      if (instruction instanceof GetInstruction getInstruction) {
+        assertEquals(
+            getInstruction.getArgument().get(1), lruCache.get(getInstruction.getArgument().get(0)));
+      }
+      if (instruction instanceof PutInstruction putInstruction) {
+        lruCache.put(
+            putInstruction.getArgument().getKey(), putInstruction.getArgument().getValue());
+      }
     }
+  }
+
+  private void printTestDivider() {
+    LOGGER.debug("################################################");
+  }
+
+  private void printOperationDivider() {
+    LOGGER.debug("------------------------------------------------");
+  }
 }

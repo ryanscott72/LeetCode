@@ -12,8 +12,7 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="leetcode.problems" level="INFO"/>
-        <Root level="WARN">
+        <Root level="INFO">
             <AppenderRef ref="CONSOLE"/>
         </Root>
     </Loggers>

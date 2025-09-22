@@ -13,8 +13,7 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="leetcode.problems" level="DEBUG"/>
-        <Root level="WARN">
+        <Root level="DEBUG">
             <AppenderRef ref="CONSOLE"/>
         </Root>
     </Loggers>
