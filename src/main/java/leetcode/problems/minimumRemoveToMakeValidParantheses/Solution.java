@@ -1,4 +1,4 @@
-package minimumRemoveToMakeValidParantheses;
+package leetcode.problems.minimumRemoveToMakeValidParantheses;
 
 import java.util.LinkedList;
 import java.util.List;

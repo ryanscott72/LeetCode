@@ -1,4 +1,4 @@
-package minimumRemoveToMakeValidParantheses;
+package leetcode.problems.minimumRemoveToMakeValidParantheses;
 
 import static org.junit.jupiter.api.Assertions.*;
 
